@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build_test:
 
     runs-on: ubuntu-latest
 
@@ -18,10 +18,12 @@ jobs:
     - name: Use Node.js 20
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 20
         cache: 'npm'
     - name: Instal Dependencies
       run: npm i
+    - name: Instal Playwright browser
+      run: npx playwright install
     - name: Start the Backedn
       run: npm run start-be &
     - name: Start the FrontEnd
