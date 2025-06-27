@@ -1,0 +1,30 @@
+name: Build, Test ad Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Instal Dependencies
+      run: npm i
+    - name: Start the Backedn
+      run: npm run start-be &
+    - name: Start the FrontEnd
+      run: npm run start-fe &
+    - name: Execute UI Tests
+      run: npm run test
