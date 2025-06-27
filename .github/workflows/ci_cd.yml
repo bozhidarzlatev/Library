@@ -33,3 +33,28 @@ jobs:
       run: npm run start-fe &
     - name: Execute UI Tests
       run: npm run test
+
+
+  deploy-be:
+    runs-on: ubuntu-latest
+    needs: build_test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_BE_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait-for-success: true
+
+  deploy-fe:
+    runs-on: ubuntu-latest
+    needs: deploy-be
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_FE_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait-for-success: true
